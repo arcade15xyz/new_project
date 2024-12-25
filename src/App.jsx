@@ -1,12 +1,18 @@
 import { useState } from 'react'
 import './App.css'
+import ProjectsSidebar from './components/ProjectsSidebar'
+import NewProject from './components/NewProject'
 
 function App() {
 
 
   return (
     <>
-        <h1 className=""> coco joko</h1>
+      <main className=' h-screen my-8'>
+        <ProjectsSidebar></ProjectsSidebar>
+        <NewProject></NewProject>
+      </main>
+        
     </>
   )
 }
