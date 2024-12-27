@@ -4,6 +4,7 @@ import './App.css';
 import ProjectsSidebar from './components/ProjectsSidebar';
 import NewProject from './components/NewProject';
 import NoProjectSelected from './components/NoProjectSelected';
+import SelectedProject from './components/SelectedProject'; 
 
 export default function App() {
   const [projectsState,setProjectsState] = useState(
@@ -12,6 +13,17 @@ export default function App() {
       projects:[]
     }
   );
+
+  function handleSelectProject(id){
+    setProjectsState(prevState =>{
+      return{
+        ...prevState,
+        selectedProjectId: id,
+    };
+    }
+  );
+  }
+ 
   function handleStartAddProject(){
     setProjectsState(prevState =>{
       return{
@@ -32,6 +44,8 @@ export default function App() {
   );
   }
 
+
+
   function handleAddProject (projectData){
     setProjectsState(prevState =>{
       const newProject ={
@@ -45,8 +59,21 @@ export default function App() {
       }
     })
   }
-  console.log(projectsState);
-  let content;
+
+  function handleDeleteProject(){
+    setProjectsState(prevState =>{
+      return{
+        ...prevState,
+        selectedProjectId: undefined,
+        projects:prevState.projects.filter((project)=>project.id !== prevState.selectedProjectId)
+    };
+    }
+  );
+  }
+
+  const selectedProject = projectsState.projects.find(project =>project.id ===projectsState.selectedProjectId);
+
+  let content = <SelectedProject project={selectedProject} onDelete={handleDeleteProject}></SelectedProject>;
 
   if(projectsState.selectedProjectId ===null){
     content = <NewProject onAdd={handleAddProject} onCancel={handleCancelAddProject}/>;
@@ -59,7 +86,10 @@ export default function App() {
   return(
     <>
       <main className=' h-screen my-8 flex gap-8'>
-        <ProjectsSidebar onStartAddProject={handleStartAddProject} projects={projectsState.projects}></ProjectsSidebar>
+        <ProjectsSidebar 
+        onStartAddProject={handleStartAddProject} 
+        projects={projectsState.projects}
+        onSelectProject = {handleSelectProject}></ProjectsSidebar>
         {content}
       </main>
         
